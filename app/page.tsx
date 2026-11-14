@@ -22,6 +22,7 @@ export default function Home() {
   const [target, setTarget] = useState('');
   const [joinCode, setJoinCode] = useState('');
   const [bids, setBids] = useState<Record<number, string>>({});
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('gameId');
@@ -42,13 +43,23 @@ export default function Home() {
   }, [gameId, load]);
 
   async function createGame() {
-    const res = await fetch('/api/games', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ target, players: names }),
-    });
-    const data = await res.json();
-    setGameId(data.id);
+    setError(null);
+    try {
+      const res = await fetch('/api/games', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ target, players: names }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        setError(`Server error ${res.status}: ${text.slice(0, 200)}`);
+        return;
+      }
+      const data = await res.json();
+      setGameId(data.id);
+    } catch (e) {
+      setError(`Failed to reach server: ${e instanceof Error ? e.message : String(e)}`);
+    }
   }
 
   async function addEntry(playerId: number) {
@@ -122,6 +133,7 @@ export default function Home() {
             value={target}
             onChange={(e) => setTarget(e.target.value)}
           />
+          {error && <p style={{ color: 'var(--neg)', fontSize: 13, margin: '0 0 8px' }}>{error}</p>}
           <button className="btn btn-primary" onClick={createGame}>
             Start game
           </button>
