@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { sql } from '@/lib/db';
+import { writeAndLoadState } from '@/lib/game-state';
 
 export async function POST(
   req: Request,
@@ -7,11 +8,26 @@ export async function POST(
 ) {
   const { id } = await params;
   const gameId = Number(id);
-  const { playerId, bid, made } = await req.json();
+  const body = await req.json();
 
-  const rows = await sql`
+  const playerId = Number(body.playerId);
+  const bid = Math.max(1, Math.min(99, Math.abs(Math.trunc(Number(body.bid))) || 0));
+  const made = body.made ?? true;
+
+  if (!bid) {
+    return NextResponse.json({ error: 'bid must be a positive number' }, { status: 400 });
+  }
+
+  // Only inserts if playerId actually belongs to this game.
+  const write = sql`
     insert into entries (game_id, player_id, bid, made)
-    values (${gameId}, ${Number(playerId)}, ${Math.abs(Number(bid)) || 0}, ${made ?? true})
-    returning id`;
-  return NextResponse.json({ id: rows[0].id });
+    select ${gameId}, ${playerId}, ${bid}, ${Boolean(made)}
+    where exists (select 1 from players where id = ${playerId} and game_id = ${gameId})
+  `;
+
+  const state = await writeAndLoadState(gameId, [write]);
+  if (!state) {
+    return NextResponse.json({ error: 'not found' }, { status: 404 });
+  }
+  return NextResponse.json(state);
 }
