@@ -86,6 +86,14 @@ export function Target({ size = 24, className }: IconProps) {
   );
 }
 
+export function Moon({ size = 24, className }: IconProps) {
+  return (
+    <svg {...base(size)} fill="currentColor" stroke="none" className={className}>
+      <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+    </svg>
+  );
+}
+
 export function Clock({ size = 24, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>

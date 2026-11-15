@@ -8,6 +8,7 @@ import { Stepper } from '@/components/ui/Stepper';
 import { Button } from '@/components/ui/Button';
 import { Avatar } from '@/components/ui/Avatar';
 import { ChevronRight } from '@/components/ui/Icon';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { createGame, ApiError } from '@/lib/api';
 import { getRecentGames, type RecentGame } from '@/lib/recent';
 
@@ -76,7 +77,11 @@ export function HomeScreen({
   return (
     <main className="page">
       <div className="topbar">
+        <div className="topbar-side" />
         <span className="topbar-title" />
+        <div className="topbar-side" style={{ justifyContent: 'flex-end' }}>
+          <ThemeToggle />
+        </div>
       </div>
       <div className="content">
         <h1 className="large-title" style={{ margin: '6px 0 16px' }}>

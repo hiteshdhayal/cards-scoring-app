@@ -13,6 +13,7 @@ import { TargetSheet } from '@/components/TargetSheet';
 import { WinnerCelebration } from '@/components/WinnerCelebration';
 import { ActionSheet } from '@/components/ui/ActionSheet';
 import { Toast } from '@/components/ui/Toast';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { ChevronLeft, Share as ShareIcon, Target as TargetIcon } from '@/components/ui/Icon';
 import type { Entry, Player } from '@/lib/score';
 
@@ -152,6 +153,7 @@ export function GameScreen({ gameId, onLeave }: { gameId: number; onLeave: () =>
         </div>
         <span className="topbar-title">Game {gameId}</span>
         <div className="topbar-side" style={{ justifyContent: 'flex-end' }}>
+          <ThemeToggle />
           <button type="button" className="topbar-link" onClick={handleShare} aria-label="Share game code">
             <ShareIcon size={20} />
           </button>

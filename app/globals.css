@@ -24,8 +24,14 @@
   color-scheme: light;
 }
 
+/*
+ * Dark tokens apply by system preference unless the toggle has set an
+ * explicit [data-theme], and always apply when it explicitly set "dark" —
+ * this lets the manual toggle override the system setting in either
+ * direction (see ThemeToggle, which sets [data-theme] + localStorage).
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme='light']) {
     --bg: #000000;
     --card: #1c1c1e;
     --card-2: #2c2c2e;
@@ -48,6 +54,30 @@
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
     color-scheme: dark;
   }
+}
+
+:root[data-theme='dark'] {
+  --bg: #000000;
+  --card: #1c1c1e;
+  --card-2: #2c2c2e;
+  --label: #ffffff;
+  --label-2: rgba(235, 235, 245, 0.6);
+  --label-3: rgba(235, 235, 245, 0.35);
+  --separator: rgba(84, 84, 88, 0.65);
+  --blue: #0a84ff;
+  --blue-contrast: #ffffff;
+  --green: #30d158;
+  --green-bg: rgba(48, 209, 88, 0.18);
+  --red: #ff453a;
+  --red-bg: rgba(255, 69, 58, 0.18);
+  --orange: #ff9f0a;
+  --purple: #bf5af2;
+  --pink: #ff375f;
+  --teal: #40c8e0;
+  --sheet-bg: #1c1c1e;
+  --overlay: rgba(0, 0, 0, 0.55);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
 }
 
 /* ---------- Base ---------- */
